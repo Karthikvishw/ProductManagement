@@ -1,0 +1,9 @@
+/Users/karthikvishwambar/Projects/ProductManagement/Entities/obj/Debug/netcoreapp3.1/Entities.csprojAssemblyReference.cache
+/Users/karthikvishwambar/Projects/ProductManagement/Entities/obj/Debug/netcoreapp3.1/Entities.AssemblyInfoInputs.cache
+/Users/karthikvishwambar/Projects/ProductManagement/Entities/obj/Debug/netcoreapp3.1/Entities.AssemblyInfo.cs
+/Users/karthikvishwambar/Projects/ProductManagement/Entities/obj/Debug/netcoreapp3.1/Entities.csproj.CoreCompileInputs.cache
+/Users/karthikvishwambar/Projects/ProductManagement/Entities/bin/Debug/netcoreapp3.1/Entities.deps.json
+/Users/karthikvishwambar/Projects/ProductManagement/Entities/bin/Debug/netcoreapp3.1/Entities.dll
+/Users/karthikvishwambar/Projects/ProductManagement/Entities/bin/Debug/netcoreapp3.1/Entities.pdb
+/Users/karthikvishwambar/Projects/ProductManagement/Entities/obj/Debug/netcoreapp3.1/Entities.dll
+/Users/karthikvishwambar/Projects/ProductManagement/Entities/obj/Debug/netcoreapp3.1/Entities.pdb
