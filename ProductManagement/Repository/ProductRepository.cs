@@ -25,7 +25,7 @@ namespace Repository
             {
                 Id = x.Id,
                 Name = x.Name,
-                Descriptions = x.Descriptions,
+                Description = x.Descriptions,
                 AdditionalNote = x.AdditionalNote,
                 Category = new ProductCategoryModel()
                             {
@@ -45,13 +45,34 @@ namespace Repository
             return await (await ListAsync()).AsQueryable().SearchAsync(searchItemModels);
         }
 
+        public async Task<ProductModel> SearchAsync(int productId)
+        {
+            return await _dbContext.Products.Where(x => !x.Deleted && x.Id == productId).Select( product => new ProductModel() {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Descriptions,
+                AdditionalNote = product.AdditionalNote,
+                Category = new ProductCategoryModel()
+                {
+                    Id = product.ProductCategory.Id,
+                    Name = product.ProductCategory.Name
+                },
+                Status = new StatusModel()
+                {
+                    Id = product.Status.Id,
+                    Name = product.Status.Name
+                },
+            }).SingleOrDefaultAsync() ?? throw new Exception("Product not found");
+
+        }
+
         public async Task<ProductModel> AddorUpdateAsync(ProductModel product)
         {
             Products products = await _dbContext.Products.Where(x => !x.Deleted && x.Id == product.Id).SingleOrDefaultAsync() ?? new Products();
             if (products != null)
             {
                 products.Name = product.Name;
-                products.Descriptions = product.Descriptions;
+                products.Descriptions = product.Description;
                 products.AdditionalNote = product.AdditionalNote;
                 products.CategoryId = product.Category.Id;
                 products.StatusId = product.Status.Id;

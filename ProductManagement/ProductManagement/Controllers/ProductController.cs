@@ -22,14 +22,14 @@ namespace ProductManagement.Controllers
             _productRepository = productRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return await Task.Run(() => View());
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
-            return View();
+            return await Task.Run(() => View());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -38,12 +38,19 @@ namespace ProductManagement.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<IActionResult> GetProductsAsync()
+        public async Task<IActionResult> GetProducts()
         {
             return Ok(await _productRepository.ListAsync());
         }
 
-        public async Task<IActionResult> AddorUpdateAsync([FromBody] ProductModel productModel)
+        public async Task<IActionResult> Edit(int id)
+        {
+            var product = await _productRepository.SearchAsync(id);
+
+            return await Task.Run(() => View("Edit", product));
+        }
+
+        public async Task<IActionResult> AddorUpdate([FromBody] ProductModel productModel)
         {
             return Ok(await _productRepository.AddorUpdateAsync(productModel));
         }

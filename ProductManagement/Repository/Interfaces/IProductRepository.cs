@@ -9,6 +9,8 @@ namespace Repository.Interfaces
     {
         Task<ReturnSearchItemModels<ProductModel>> SearchAsync(SearchItemModels searchItemModels);
 
+        Task<ProductModel> SearchAsync(int productId);
+
         Task<List<ProductModel>> ListAsync();
 
         Task<ProductModel> AddorUpdateAsync(ProductModel product);
