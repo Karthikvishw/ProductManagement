@@ -129,7 +129,7 @@ namespace Repository.Extensions
         {
             #region Sorting
 
-            fullquery = fullquery.SortByColumn(param).Skip(param.Skip).Take(param.Take);
+            fullquery = fullquery.SortByColumn(param).Skip(param.Start).Take(param.Length);
 
             #endregion Sorting
 
@@ -168,7 +168,7 @@ namespace Repository.Extensions
 
             #endregion column Filter
 
-            int total = await query.CountAsync();
+            int total = query.ToList().Count;
 
             #region Sorting
 
@@ -176,10 +176,13 @@ namespace Repository.Extensions
 
             #endregion Sorting
 
+            int filtered = query.ToList().Count;
+
             return new ReturnSearchItemModels<T>
             {
-                Total = total,
-                Items = await query.ToListAsync(),
+                recordsTotal = total,
+                recordsFiltered = filtered,
+                data = query.ToList(),
             };
         }
 

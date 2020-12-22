@@ -14,5 +14,6 @@ namespace Repository.Interfaces
         Task<List<ProductModel>> ListAsync();
 
         Task<ProductModel> AddorUpdateAsync(ProductModel product);
+        Task DeleteAsync(int productId);
     }
 }

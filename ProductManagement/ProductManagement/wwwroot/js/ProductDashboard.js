@@ -1,11 +1,12 @@
-﻿function OpenModal(curl) {
+﻿function refreshProductTable() {
+    $("#productTable").DataTable().ajax.reload(null, false);
+}
+
+function OpenModal(curl) {
     if (curl != null && curl.length > 0) {
         $.ajax({
             url: curl,
             method: "GET",
-            beforeSend: function (jqXHR, settings) {
-                $('#loading').show();
-            },
             success: function (data) {
                 $('#modal-container').html(data);
                 $('#modal-container').modal({
@@ -14,9 +15,6 @@
                     backdrop: 'static'
                 });
                 manageModalEscapeKey();
-            },
-            complete: function (jqXHR, textStatus) {
-                $('#loading').hide();
             }
         });
     }
@@ -60,10 +58,10 @@ var productDashboardDefaultSettings = {
     searchDelay: 500,
     columnDefs: [
         {
-            targets": [1, 2, 3, 4, 5], orderable: false, searchable: false
+            targets: [1, 2, 3, 4, 5], orderable: false, searchable: false
         }
     ]
-};
+}
 
 var ProductTableInit = {
     Product: function () {
@@ -87,17 +85,20 @@ var ProductTableInit = {
             columnDefs: [{ "targets": [1, 2, 3, 4, 5], orderable: false }],
             order: [[1, "desc"]],
             columns: [
-                { "data": "Name" },
-                { "data": "Descriptions" },
-                { "data": "AdditionalNote" },
-                { "data": "Category.Name" },
-                { "data": "Status.Name" },
+                { "data": "name" },
+                { "data": "description" },
+                { "data": "additionalNote" },
+                { "data": "category" },
+                { "data": "status" },
                 {
                     "data": "Actions", render: function (data, type, full) {
                         var returnValue = "";
 
-                        returnValue = `<button type="button" class="btn btn-default btn-open-product-form">Edit</button>`;
-                        returnValue += '<input id="hidProductID" name="hidProductID" type="hidden" value="' + full.Id + '">';
+                        returnValue += '<div class="btn-group">';
+                        returnValue += '<button type="button" class="btn btn-default btn-open-product-form">Edit</button>';
+                        returnValue += '<button type="button" class="btn btn-default btn-remove-product">Remove</button>';
+                        returnValue += '<input id="hidProductID" name="hidProductID" type="hidden" value="' + full.id + '">';
+                        returnValue += '</div>';
 
                         return returnValue;
                     }
@@ -110,13 +111,38 @@ var ProductTableInit = {
                     OpenModal("/product/edit?productId=" + productId);
                 });
 
+                $(".btn-remove-product").off('click');
+                $(".btn-remove-product").on('click', function () {
+                    var productId = $(this).closest('.btn-group').find("input[name=hidProductID]").val();
+
+                    $.ajax({
+                        url: "/product/delete?productId=" + productId,
+                        method: "POST",
+                        success: function (response) {
+                            refreshProductTable();
+                        },
+                        error: function () {
+                            alert('An unexpected error occurred');
+                        }
+                    });
+                });
+
             }
         }));
 
         return table;
-    };
+    }
 }
+
+$('#modal-container').on('shown.bs.modal', function () {
+    $('.modal-dialog').trigger('focus')
+})
 
 $(document).ready(function () {
     ProductTableInit.Product();
+
+    $(".btn-add-product-form").off('click');
+    $(".btn-add-product-form").on('click', function () {
+        OpenModal("/product/edit?productId=" + 0);
+    });
 });

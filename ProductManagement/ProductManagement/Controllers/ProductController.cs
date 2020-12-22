@@ -38,19 +38,26 @@ namespace ProductManagement.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> GetProducts(SearchItemModels searchItem)
         {
-            return Ok(await _productRepository.ListAsync());
+            return Ok(await _productRepository.SearchAsync(searchItem));
         }
 
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int productId)
         {
-            var product = await _productRepository.SearchAsync(id);
+            var product = await _productRepository.SearchAsync(productId);
 
             return await Task.Run(() => View("Edit", product));
         }
 
-        public async Task<IActionResult> AddorUpdate([FromBody] ProductModel productModel)
+        [HttpPost]
+        public async Task Delete(int productId)
+        {
+            await _productRepository.DeleteAsync(productId);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddorUpdate(ProductModel productModel)
         {
             return Ok(await _productRepository.AddorUpdateAsync(productModel));
         }

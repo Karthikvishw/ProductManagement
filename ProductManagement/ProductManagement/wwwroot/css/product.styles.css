@@ -1,0 +1,137 @@
+﻿#product-note-modal .mandatory-asterix:after {
+    color: red;
+    content: "*";
+}
+
+#product-note-modal .col-no-padding-left-right {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+#product-note-modal .label-btm-padding {
+    padding-bottom: 7px;
+}
+
+#product-note-modal .label-regular {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 17px;
+    color: #0A1B44;
+}
+
+#product-note-modal .btn {
+    align-items: center;
+    text-align: center;
+    color: #0A1B44;
+}
+
+#product-note-modal .modal-footer .btn {
+    width: 140px;
+}
+
+#product-note-modal table > thead > tr > th,
+.prog-attachment-wrapper table > thead > tr > th {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+#product-note-modal table > thead,
+.prog-attachment-wrapper table > thead {
+    background: #EBEDF1;
+}
+
+#product-note-modal table > tbody,
+.prog-attachment-wrapper table > tbody {
+    background: #F1F3F6;
+    color: #74808C;
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 17px;
+}
+
+#product-note-modal .modal-header {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: none;
+}
+
+#product-note-modal .modal-footer {
+    background-color: white;
+}
+
+#product-note-modal .modal-footer button {
+    margin-right: 10px;
+}
+
+#product-note-modal .modal-title {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 500 !important;
+    font-size: 24px;
+    line-height: 19px;
+    text-align: center;
+    color: #0A1B44;
+}
+
+#product-note-modal .padding-bot-top-15 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+#product-note-modal .input-validation-error {
+    border: 1px solid #ff0000 !important;
+    background-color: #FF0000;
+}
+
+#product-note-modal .error {
+    color: red;
+}
+
+#product-note-modal select.error {
+    border: 1px solid red;
+}
+
+#product-note-modal .modal-body {
+    max-height: calc(100vh - 185px);
+    overflow-y: auto;
+}
+
+#product-note-modal .modal-footer button {
+    height: 40px;
+    min-width: 120px;
+    border: 2px solid #B3C5DB !important;
+}
+
+#product-note-modal .btn-save {
+    background-color: #103384 !important;
+    color: white;
+}
+
+#product-note-modal .text-align-center {
+    text-align: center;
+}
+
+#div-edit-product-response {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    color: #0A1B44;
+}
+
+#div-edit-product-response span.widget-caption {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    color: #0A1B44;
+}

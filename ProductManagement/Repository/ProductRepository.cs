@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Entities;
 using Microsoft.EntityFrameworkCore;
@@ -25,57 +26,63 @@ namespace Repository
             {
                 Id = x.Id,
                 Name = x.Name,
-                Description = x.Descriptions,
+                Description = x.Description,
                 AdditionalNote = x.AdditionalNote,
-                Category = new ProductCategoryModel()
-                            {
-                                Id=x.ProductCategory.Id,
-                                Name = x.ProductCategory.Name
-                            },
-                Status = new StatusModel()
-                            {
-                                Id = x.Status.Id,
-                                Name = x.Status.Name
-                            }
+                CategoryId = x.ProductCategory.Id,
+                Category = x.ProductCategory.Name,
+                StatusId = x.Status.Id,
+                Status = x.Status.Name
             }).ToListAsync();
         }
 
         public async Task<ReturnSearchItemModels<ProductModel>> SearchAsync(SearchItemModels searchItemModels)
         {
-            return await (await ListAsync()).AsQueryable().SearchAsync(searchItemModels);
+            var temp = await (await ListAsync()).AsQueryable().SearchAsync(searchItemModels);
+            return temp;
         }
 
         public async Task<ProductModel> SearchAsync(int productId)
         {
-            return await _dbContext.Products.Where(x => !x.Deleted && x.Id == productId).Select( product => new ProductModel() {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Descriptions,
-                AdditionalNote = product.AdditionalNote,
-                Category = new ProductCategoryModel()
-                {
-                    Id = product.ProductCategory.Id,
-                    Name = product.ProductCategory.Name
-                },
-                Status = new StatusModel()
-                {
-                    Id = product.Status.Id,
-                    Name = product.Status.Name
-                },
-            }).SingleOrDefaultAsync() ?? throw new Exception("Product not found");
+            var product = await _dbContext.Products.Where(x => !x.Deleted && x.Id == productId).Select( product => new ProductModel() {
+                            Id = product.Id,
+                            Name = product.Name,
+                            Description = product.Description,
+                            AdditionalNote = product.AdditionalNote,
+                            CategoryId = product.ProductCategory.Id,
 
+                            Category = product.ProductCategory.Name,
+                            StatusId = product.Status.Id,
+                            Status = product.Status.Name
+                        }).SingleOrDefaultAsync() ?? new ProductModel();
+
+            product.Categories = await _dbContext.ProductCategories.Where(x => !x.Deleted).Select(category => new ProductCategoryModel()
+            {
+                Id = category.Id,
+                Name = category.Name
+            }).ToListAsync();
+
+            product.ProductStatus = await _dbContext.ProductStatuses.Where(x => !x.Deleted).Select(status => new StatusModel()
+            {
+                Id = status.Id,
+                Name = status.Name
+            }).ToListAsync();
+
+            return product;
         }
 
         public async Task<ProductModel> AddorUpdateAsync(ProductModel product)
         {
-            Products products = await _dbContext.Products.Where(x => !x.Deleted && x.Id == product.Id).SingleOrDefaultAsync() ?? new Products();
+            Product products = await _dbContext.Products.Where(x => !x.Deleted && x.Id == product.Id).SingleOrDefaultAsync() ?? new Product();
             if (products != null)
             {
                 products.Name = product.Name;
-                products.Descriptions = product.Description;
+                products.Description = product.Description;
                 products.AdditionalNote = product.AdditionalNote;
-                products.CategoryId = product.Category.Id;
-                products.StatusId = product.Status.Id;
+                products.ProductCategoryId = product.CategoryId;
+                products.StatusId = product.StatusId;
+
+                if (product.Id == 0)
+                    _dbContext.Products.Add(products);
 
                 await _dbContext.SaveAsync();
 
@@ -83,6 +90,15 @@ namespace Repository
                     product.Id = products.Id;
             } 
             return product;
+        }
+
+        public async Task DeleteAsync(int productId)
+        {
+            Product product = await _dbContext.Products.Where(x => !x.Deleted && x.Id == productId).SingleOrDefaultAsync();
+
+            _dbContext.Products.Remove(product);
+
+            await _dbContext.SaveAsync();
         }
     }
 }
